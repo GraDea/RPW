@@ -38,3 +38,15 @@ class SchedulerTestCase(TestCase):
         scheduler.add_task(todo_list_id, task_id, "my new task")
 
         Is(scheduler.get_amount_of_tasks()).integer.between(1, 1)
+
+    @staticmethod
+    def test_can_restore_deleted_list():
+        scheduler = Scheduler()
+        todo_list_id = uuid.uuid4()
+
+        scheduler.add_todo_list(todo_list_id, "my todo list")
+        scheduler.add_task(todo_list_id, uuid.uuid4(), "some task")
+        scheduler.delete_todo_list(todo_list_id)
+        scheduler.restore_todo_list(todo_list_id)
+
+        Is(scheduler.get_amount_of_todo_lists()).integer.between(1, 1)
